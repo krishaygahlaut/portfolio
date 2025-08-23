@@ -6,6 +6,7 @@ import "./globals.css";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Projects from "./components/Projects";
+import { Analytics } from '@vercel/analytics/react';
 
 export default function Home() {
   // Contact form toast state
@@ -880,6 +881,7 @@ export default function Home() {
           © {new Date().getFullYear()} Krishay Gahlaut. All rights reserved.
         </p>
       </motion.footer>
+      <Analytics />
     </div>
   );
 }
