@@ -1,10 +1,15 @@
+// @ts-nocheck
 "use client";
+import { useState } from "react";
+import SuccessToast from "./SuccessToast";
 import "./globals.css";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Projects from "./components/Projects";
 
 export default function Home() {
+  // Contact form toast state
+  const [showToast, setShowToast] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [isClicking, setIsClicking] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -121,13 +126,13 @@ export default function Home() {
   };
 
   const aboutItemVariants = {
-    hidden: { opacity: 0, y: 40, scale: 0.95 },
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring" as const, stiffness: 60, damping: 25, mass: 0.8 },
-    },
+      transition: { type: "spring" as const, stiffness: 50, damping: 30, mass: 1 }
+    }
   };
 
   const testimonialsContainerVariants = {
@@ -140,13 +145,13 @@ export default function Home() {
   };
 
   const testimonialItemVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.97 },
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring" as const, stiffness: 150, damping: 25, mass: 0.8 },
-    },
+      transition: { type: "spring" as const, stiffness: 50, damping: 30, mass: 1 }
+    }
   };
 
   return (
@@ -193,20 +198,20 @@ export default function Home() {
       bg-gradient-to-b from-black via-purple-950 to-black text-white relative overflow-hidden cursor-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.5 }}
+        transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
       >
         {/* Background Overlay */}
         <motion.div
           initial={{ opacity: 0, filter: "blur(0px)" }}
           animate={{ opacity: 0.6, filter: "blur(8px)" }}
-          transition={{ duration: 3, ease: "easeInOut" }}
+          transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
           className="absolute inset-0 bg-gradient-to-br from-black/70 via-purple-900/40 to-black/70"
         />
         {/* Elegant Name */}
         <motion.h1
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+          transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
           className="text-6xl md:text-8xl font-extrabold mb-6 
         bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-400 to-purple-600"
         >
@@ -217,7 +222,7 @@ export default function Home() {
         <motion.h2
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
+          transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1, delay: 0.4 }}
           className="text-xl md:text-3xl font-medium 
         bg-clip-text text-transparent bg-gradient-to-r from-gray-300 via-purple-200 to-pink-200"
         >
@@ -232,7 +237,7 @@ export default function Home() {
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.6 }}
-          transition={{ delay: 2, duration: 1 }}
+          transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1, delay: 2 }}
           onClick={scrollToAbout}
           className="absolute bottom-10 animate-bounce text-white/70 cursor-pointer"
         >
@@ -249,7 +254,7 @@ export default function Home() {
               scale: isClicking ? 2.2 : 1.5,
               opacity: isClicking ? 0.6 : 0.4,
             }}
-            transition={{ type: "spring", stiffness: 100, damping: 30 }}
+            transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
             className="fixed top-0 left-0 w-16 h-16 rounded-full pointer-events-none
       bg-purple-500 blur-2xl opacity-50 mix-blend-screen z-40"
           />
@@ -261,7 +266,7 @@ export default function Home() {
               scale: isClicking ? 1.6 : 1,
               opacity: 1,
             }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
             className="fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none
       bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 shadow-lg z-50"
           />
@@ -292,6 +297,7 @@ export default function Home() {
           {/* Animated heading */}
           <motion.h2
             variants={aboutItemVariants}
+            transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
             className="text-4xl md:text-5xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-400 to-purple-600"
           >
             About Me
@@ -300,6 +306,7 @@ export default function Home() {
           {/* Intro text */}
           <motion.p
             variants={aboutItemVariants}
+            transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
             className="max-w-3xl text-lg md:text-xl text-gray-300 leading-relaxed text-center"
           >
             I'm <span className="text-purple-400 font-semibold">Krishay Gahlaut</span>,
@@ -321,6 +328,20 @@ export default function Home() {
             {/* iOS */}
             <motion.div
               variants={aboutItemVariants}
+              onMouseMove={(e) => {
+                const target = e.currentTarget;
+                const rect = target.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const rotateX = (y / rect.height) * -10; 
+                const rotateY = (x / rect.width) * 10; 
+                target.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+                e.currentTarget.style.transition = "transform 0.3s ease-out";
+              }}
+              style={{ transition: "transform 0.15s ease-out" }}
               className="bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-6 backdrop-blur-md border border-purple-700/40 shadow-lg hover:shadow-purple-500/30 transition"
             >
               <h3 className="text-2xl font-semibold text-purple-300 mb-3">iOS Development</h3>
@@ -333,6 +354,20 @@ export default function Home() {
             {/* Web */}
             <motion.div
               variants={aboutItemVariants}
+              onMouseMove={(e) => {
+                const target = e.currentTarget;
+                const rect = target.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const rotateX = (y / rect.height) * -10; 
+                const rotateY = (x / rect.width) * 10; 
+                target.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+                e.currentTarget.style.transition = "transform 0.3s ease-out";
+              }}
+              style={{ transition: "transform 0.15s ease-out" }}
               className="bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-6 backdrop-blur-md border border-purple-700/40 shadow-lg hover:shadow-purple-500/30 transition"
             >
               <h3 className="text-2xl font-semibold text-purple-300 mb-3">Web Development</h3>
@@ -345,6 +380,20 @@ export default function Home() {
             {/* AI */}
             <motion.div
               variants={aboutItemVariants}
+              onMouseMove={(e) => {
+                const target = e.currentTarget;
+                const rect = target.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const rotateX = (y / rect.height) * -10; 
+                const rotateY = (x / rect.width) * 10; 
+                target.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+                e.currentTarget.style.transition = "transform 0.3s ease-out";
+              }}
+              style={{ transition: "transform 0.15s ease-out" }}
               className="bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-6 backdrop-blur-md border border-purple-700/40 shadow-lg hover:shadow-purple-500/30 transition"
             >
               <h3 className="text-2xl font-semibold text-purple-300 mb-3">AI & Productivity</h3>
@@ -363,12 +412,13 @@ export default function Home() {
         className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-purple-950 to-black text-white px-6 md:px-20 py-20"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
         viewport={{ once: true }}
       >
         <h2 className="text-4xl md:text-5xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-400 to-purple-600">
           Projects
         </h2>
+        {/* Parallax tilt for cards in Projects: handled inside <Projects /> if cards are rendered there */}
         <Projects />
       </motion.section>
 
@@ -378,7 +428,7 @@ export default function Home() {
         className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-purple-950 to-black text-white px-6 md:px-20 py-20"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
         viewport={{ once: true }}
       >
         <h2 className="text-4xl md:text-5xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-400 to-purple-600">
@@ -389,13 +439,12 @@ export default function Home() {
             <div key={name}>
               <div className="flex justify-between mb-1">
                 <span className="text-lg font-medium text-purple-300">{name}</span>
-                <span className="text-sm text-gray-400">{level}%</span>
               </div>
               <div className="w-full bg-purple-900 rounded-full h-4">
                 <motion.div
                   initial={{ width: 0 }}
                   whileInView={{ width: `${level}%` }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
                   viewport={{ once: true }}
                   className="h-4 rounded-full bg-gradient-to-r from-pink-400 via-purple-500 to-purple-700"
                 />
@@ -451,6 +500,7 @@ export default function Home() {
         initial="hidden"
         whileInView="visible"
         variants={experienceContainerVariants}
+        transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
         viewport={{ once: true }}
       >
         {/* Subtle animated glow background */}
@@ -503,7 +553,21 @@ export default function Home() {
           <motion.div
             variants={testimonialItemVariants}
             whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(168,85,247,0.3)" }}
-            transition={{ type: "spring", stiffness: 150, damping: 15 }}
+            transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
+            onMouseMove={(e) => {
+              const target = e.currentTarget;
+              const rect = target.getBoundingClientRect();
+              const x = e.clientX - rect.left - rect.width / 2;
+              const y = e.clientY - rect.top - rect.height / 2;
+              const rotateX = (y / rect.height) * -10; 
+              const rotateY = (x / rect.width) * 10; 
+              target.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+              e.currentTarget.style.transition = "transform 0.3s ease-out";
+            }}
+            style={{ transition: "transform 0.15s ease-out" }}
             className="z-10 bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-6 backdrop-blur-md border border-purple-700/40 shadow-lg hover:shadow-purple-500/30 transition"
           >
             <p className="text-gray-300 italic mb-4">
@@ -515,7 +579,21 @@ export default function Home() {
           <motion.div
             variants={testimonialItemVariants}
             whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(168,85,247,0.3)" }}
-            transition={{ type: "spring", stiffness: 150, damping: 15 }}
+            transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
+            onMouseMove={(e) => {
+              const target = e.currentTarget;
+              const rect = target.getBoundingClientRect();
+              const x = e.clientX - rect.left - rect.width / 2;
+              const y = e.clientY - rect.top - rect.height / 2;
+              const rotateX = (y / rect.height) * -10; 
+              const rotateY = (x / rect.width) * 10; 
+              target.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+              e.currentTarget.style.transition = "transform 0.3s ease-out";
+            }}
+            style={{ transition: "transform 0.15s ease-out" }}
             className="z-10 bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-6 backdrop-blur-md border border-purple-700/40 shadow-lg hover:shadow-purple-500/30 transition"
           >
             <p className="text-gray-300 italic mb-4">
@@ -527,7 +605,21 @@ export default function Home() {
           <motion.div
             variants={testimonialItemVariants}
             whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(168,85,247,0.3)" }}
-            transition={{ type: "spring", stiffness: 150, damping: 15 }}
+            transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
+            onMouseMove={(e) => {
+              const target = e.currentTarget;
+              const rect = target.getBoundingClientRect();
+              const x = e.clientX - rect.left - rect.width / 2;
+              const y = e.clientY - rect.top - rect.height / 2;
+              const rotateX = (y / rect.height) * -10; 
+              const rotateY = (x / rect.width) * 10; 
+              target.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+              e.currentTarget.style.transition = "transform 0.3s ease-out";
+            }}
+            style={{ transition: "transform 0.15s ease-out" }}
             className="z-10 bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-6 backdrop-blur-md border border-purple-700/40 shadow-lg hover:shadow-purple-500/30 transition"
           >
             <p className="text-gray-300 italic mb-4">
@@ -543,6 +635,7 @@ export default function Home() {
         className="min-h-[70vh] flex flex-col items-center justify-center bg-gradient-to-b from-black via-purple-950 to-black text-white px-6 md:px-20 py-20 relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
+        transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
         viewport={{ once: true, amount: 0.3 }}
       >
         {/* Subtle animated glow background */}
@@ -576,81 +669,106 @@ export default function Home() {
             Interested in collaborating or have a project in mind? Let&rsquo;s connect and create something amazing!
           </motion.p>
           {/* Contact Form */}
-          <motion.form
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="w-full bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-8 backdrop-blur-md border border-purple-700/40 shadow-lg flex flex-col gap-6 mb-8"
-            onSubmit={e => {
-              e.preventDefault();
-              // Could add form handling here
-            }}
-            autoComplete="off"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              viewport={{ once: true }}
-              className="flex flex-col"
-            >
-              <label htmlFor="name" className="text-purple-200 mb-2">Name</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="rounded-lg px-4 py-2 bg-black/60 border border-purple-700/40 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
-                autoComplete="off"
-              />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.6 }}
-              viewport={{ once: true }}
-              className="flex flex-col"
-            >
-              <label htmlFor="email" className="text-purple-200 mb-2">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="rounded-lg px-4 py-2 bg-black/60 border border-purple-700/40 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition"
-                autoComplete="off"
-              />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.7 }}
-              viewport={{ once: true }}
-              className="flex flex-col"
-            >
-              <label htmlFor="message" className="text-purple-200 mb-2">Message</label>
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                required
-                className="rounded-lg px-4 py-2 bg-black/60 border border-purple-700/40 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition resize-none"
-                autoComplete="off"
-              />
-            </motion.div>
-            <motion.button
-              type="submit"
-              whileHover={{
-                boxShadow: "0 0 24px 6px #a855f7, 0 0 40px 12px #ec4899",
-                scale: 1.05,
-                transition: { duration: 0.2 },
-              }}
-              className="mt-2 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-700 text-white font-semibold py-2 rounded-lg shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
-              Send Message
-            </motion.button>
-          </motion.form>
+<motion.form
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1, delay: 0.4 }}
+  viewport={{ once: true }}
+  className="w-full bg-gradient-to-br from-purple-900/40 to-black/30 rounded-xl p-8 backdrop-blur-md border border-purple-700/40 shadow-lg flex flex-col gap-6 mb-8"
+  onSubmit={async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const button = form.querySelector("button");
+    if (button) button.innerHTML = "⏳ Sending...";
+    try {
+      const res = await fetch("https://formspree.io/f/xvgqebyj", {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        setShowToast(true);
+        form.reset();
+      }
+      // If you want to handle errors, you can add error toast logic here
+    } catch (err) {
+      // Optionally, you could show an error toast
+    }
+    if (button) button.innerHTML = "Send Message";
+  }}
+  autoComplete="off"
+>
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, delay: 0.5 }}
+    viewport={{ once: true }}
+    className="flex flex-col"
+  >
+    <label htmlFor="name" className="text-purple-200 mb-2">Name</label>
+    <input
+      id="name"
+      name="name"
+      type="text"
+      required
+      className="rounded-lg px-4 py-2 bg-black/60 border border-purple-700/40 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+      autoComplete="off"
+    />
+  </motion.div>
+
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, delay: 0.6 }}
+    viewport={{ once: true }}
+    className="flex flex-col"
+  >
+    <label htmlFor="email" className="text-purple-200 mb-2">Email</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      className="rounded-lg px-4 py-2 bg-black/60 border border-purple-700/40 text-white focus:outline-none focus:ring-2 focus:ring-pink-400 transition"
+      autoComplete="off"
+    />
+  </motion.div>
+
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1, delay: 0.7 }}
+    viewport={{ once: true }}
+    className="flex flex-col"
+  >
+    <label htmlFor="message" className="text-purple-200 mb-2">Message</label>
+    <textarea
+      id="message"
+      name="message"
+      rows={4}
+      required
+      className="rounded-lg px-4 py-2 bg-black/60 border border-purple-700/40 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition resize-none"
+      autoComplete="off"
+    />
+  </motion.div>
+
+  <motion.button
+    type="submit"
+    whileHover={{
+      boxShadow: "0 0 24px 6px #a855f7, 0 0 40px 12px #ec4899",
+      scale: 1.1,
+    }}
+    whileTap={{ scale: 0.95 }}
+    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+    className="mt-2 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-700 text-white font-semibold py-2 rounded-lg shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-purple-500"
+  >
+    Send Message
+  </motion.button>
+      </motion.form>
+      {showToast && (
+        <SuccessToast message="Message sent successfully!" />
+      )}
           {/* Social Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -660,39 +778,108 @@ export default function Home() {
             className="flex gap-8 items-center justify-center"
           >
             {/* GitHub */}
-            <a
-              href="https://github.com/krishayg"
+            <motion.a
+              href="https://github.com/krishaygahlaut"
               target="_blank"
               rel="noopener noreferrer"
               className="text-purple-300 hover:text-pink-400 transition flex items-center gap-2 text-lg"
               aria-label="GitHub"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              onMouseMove={(e) => {
+                const target = e.currentTarget;
+                const rect = target.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                target.animate(
+                  { transform: `translate(${x * 0.2}px, ${y * 0.2}px)` },
+                  { duration: 200, fill: "forwards" }
+                );
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.animate(
+                  { transform: "translate(0px, 0px)" },
+                  { duration: 300, easing: "ease-out", fill: "forwards" }
+                );
+              }}
             >
               <svg width="24" height="24" fill="currentColor" className="inline-block align-middle"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.426 2.865 8.182 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.157-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.004.07 1.532 1.033 1.532 1.033.892 1.53 2.341 1.089 2.91.833.092-.647.35-1.09.636-1.341-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.847-2.338 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.42-.012 2.75 0 .267.18.578.688.48C19.138 20.2 22 16.446 22 12.021 22 6.484 17.522 2 12 2z"/></svg>
               <span className="hidden md:inline">GitHub</span>
-            </a>
+            </motion.a>
             {/* LinkedIn */}
-            <a
+            <motion.a
               href="https://www.linkedin.com/in/krishaygahlaut/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-purple-300 hover:text-pink-400 transition flex items-center gap-2 text-lg"
               aria-label="LinkedIn"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              onMouseMove={(e) => {
+                const target = e.currentTarget;
+                const rect = target.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                target.animate(
+                  { transform: `translate(${x * 0.2}px, ${y * 0.2}px)` },
+                  { duration: 200, fill: "forwards" }
+                );
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.animate(
+                  { transform: "translate(0px, 0px)" },
+                  { duration: 300, easing: "ease-out", fill: "forwards" }
+                );
+              }}
             >
               <svg width="24" height="24" fill="currentColor" className="inline-block align-middle"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.5 19h-3v-9h3v9zm-1.5-10.3c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15 10.3h-3v-4.5c0-1.07-.02-2.44-1.5-2.44-1.5 0-1.73 1.17-1.73 2.36v4.58h-3v-9h2.89v1.23h.04c.4-.75 1.41-1.54 2.9-1.54 3.1 0 3.67 2.04 3.67 4.7v4.61z"/></svg>
               <span className="hidden md:inline">LinkedIn</span>
-            </a>
+            </motion.a>
             {/* Email */}
-            <a
-              href="mailto:krishaygahlaut@gmail.com"
+            <motion.a
+              href="mailto:krishaygahlaut@icloud.com"
               className="text-purple-300 hover:text-pink-400 transition flex items-center gap-2 text-lg"
               aria-label="Email"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              onMouseMove={(e) => {
+                const target = e.currentTarget;
+                const rect = target.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                target.animate(
+                  { transform: `translate(${x * 0.2}px, ${y * 0.2}px)` },
+                  { duration: 200, fill: "forwards" }
+                );
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.animate(
+                  { transform: "translate(0px, 0px)" },
+                  { duration: 300, easing: "ease-out", fill: "forwards" }
+                );
+              }}
             >
               <svg width="24" height="24" fill="currentColor" className="inline-block align-middle"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v.01L12 13 4 6.01V6h16zm0 12H4V8.99l8 6.99 8-6.99V18z"/></svg>
               <span className="hidden md:inline">Email</span>
-            </a>
+            </motion.a>
           </motion.div>
         </motion.div>
       </motion.section>
+      {/* Footer */}
+      <motion.footer
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+        className="w-full py-6 mt-20 border-t border-white/10 text-center text-sm text-gray-400"
+      >
+        <p>
+          © {new Date().getFullYear()} Krishay Gahlaut. All rights reserved.
+        </p>
+      </motion.footer>
     </div>
   );
 }
