@@ -188,6 +188,8 @@ export default function Home() {
               <a href="#projects" onClick={() => setIsNavOpen(false)} className="hover:text-pink-400">Projects</a>
               <a href="#skills" onClick={() => setIsNavOpen(false)} className="hover:text-pink-400">Skills</a>
               <a href="#experience" onClick={() => setIsNavOpen(false)} className="hover:text-pink-400">Experience</a>
+              <a href="/certificates" onClick={() => setIsNavOpen(false)} className="hover:text-pink-400">Certificates</a>
+
               <a href="#testimonials" onClick={() => setIsNavOpen(false)} className="hover:text-pink-400">Testimonials</a>
               <a href="#contact" onClick={() => setIsNavOpen(false)} className="hover:text-pink-400">Contact</a>
             </motion.div>
@@ -255,7 +257,7 @@ export default function Home() {
               scale: isClicking ? 2.2 : 1.5,
               opacity: isClicking ? 0.6 : 0.4,
             }}
-            transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
+            transition={{ type: "spring", stiffness: 500, damping: 25, mass: 0.8 }}
             className="fixed top-0 left-0 w-16 h-16 rounded-full pointer-events-none
       bg-purple-500 blur-2xl opacity-50 mix-blend-screen z-40"
           />
@@ -267,7 +269,7 @@ export default function Home() {
               scale: isClicking ? 1.6 : 1,
               opacity: 1,
             }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            transition={{ type: "spring", stiffness: 500, damping: 25, mass: 0.8 }}
             className="fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none
       bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 shadow-lg z-50"
           />
