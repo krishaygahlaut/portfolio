@@ -1,10 +1,9 @@
 // @ts-nocheck
 "use client";
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SuccessToast from "./SuccessToast";
 import "./globals.css";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useEffect, useRef } from "react";
 import Projects from "./components/Projects";
 import { Analytics } from '@vercel/analytics/react';
 
@@ -14,6 +13,23 @@ export default function Home() {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [isClicking, setIsClicking] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+
+  // Tagline word swap highlight state
+  const words = ["Problem Solver", "Tech Enthusiast", "AI Explorer", "App Builder"];
+  const [currentWord, setCurrentWord] = useState(words[0]);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setCurrentWord(words[index]);
+  }, [index]);
+
 
   const { scrollYProgress } = useScroll();
 
@@ -69,10 +85,22 @@ export default function Home() {
 
   const experienceEntries = [
     {
-      title: "Internship at IIT Bombay",
-      date: "Jun 2022 - Aug 2022",
+      title: "Built RiskyFy",
+      date: "2024",
       description:
-        "Worked on machine learning projects and contributed to research papers.",
+        "Developed a fintech-focused trading analysis app with calculators, trade logs, and strategy simulators using SwiftUI and Firebase.",
+    },
+    {
+      title: "Personal Finance Tracker",
+      date: "2025",
+      description:
+        "Created a tracker app to manage expenses, savings, and financial goals. Built with Next.js, Firebase, and Tailwind for seamless UI and sync.",
+    },
+    {
+      title: "Full-Stack Development Learning",
+      date: "2023 - Present",
+      description:
+        "Focused on mastering React, Next.js, iOS development with SwiftUI, and cloud integrations to build scalable apps.",
     },
     {
       title: "Community Connect",
@@ -91,6 +119,24 @@ export default function Home() {
       date: "Currently",
       description:
         "Exploring hardware programming and embedded systems using Arduino to broaden my development skills.",
+    },
+    {
+      title: "Hackathon Participation",
+      date: "2024",
+      description:
+        "Collaborated in national and online hackathons, solving real-world problems under tight deadlines.",
+    },
+    {
+      title: "Open Source Contributions",
+      date: "2023 - Present",
+      description:
+        "Contributed to open-source projects on GitHub, improving documentation, fixing bugs, and adding new features.",
+    },
+    {
+      title: "UI/UX Design Practice",
+      date: "Ongoing",
+      description:
+        "Practicing wireframing, prototyping, and user experience design to create intuitive and elegant applications.",
     },
   ];
 
@@ -210,42 +256,90 @@ export default function Home() {
           transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
           className="absolute inset-0 bg-gradient-to-br from-black/70 via-purple-900/40 to-black/70"
         />
-        {/* Elegant Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1 }}
-          className="text-6xl md:text-8xl font-extrabold mb-6 
-        bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-400 to-purple-600"
-        >
-          Krishay Gahlaut
-        </motion.h1>
-
-        {/* Elegant Tagline */}
-        <motion.h2
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1, delay: 0.4 }}
-          className="text-xl md:text-3xl font-medium 
-        bg-clip-text text-transparent bg-gradient-to-r from-gray-300 via-purple-200 to-pink-200"
-        >
-          Creative Developer & Designer
-        </motion.h2>
+        {/* Name and Tagline Container for Responsive Centering */}
+        <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8 lg:px-0 max-w-3xl mx-auto">
+          {/* Elegant Name */}
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: [0.4, 1, 0.4], y: [0, -4, 0] }}
+            transition={{ duration: 4, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6
+              bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-200 to-purple-400"
+          >
+            Krishay Gahlaut
+          </motion.h1>
+          {/* Tagline with word swap highlight */}
+          <h2 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-semibold mt-4 text-gray-300">
+            Creative Developer &{" "}
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={currentWord}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 70,
+                  damping: 20,
+                  mass: 1,
+                  duration: 0.8
+                }}
+                className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent"
+              >
+                {currentWord}
+              </motion.span>
+            </AnimatePresence>
+          </h2>
+        </div>
 
         {/* Subtle Glow Orbs */}
         <div className="absolute top-28 left-28 w-48 h-48 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-28 right-28 w-64 h-64 bg-pink-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
 
-        {/* Minimal Scroll Indicator */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6 }}
-          transition={{ type: "spring", stiffness: 50, damping: 30, mass: 1, delay: 2 }}
-          onClick={scrollToAbout}
-          className="absolute bottom-10 animate-bounce text-white/70 cursor-pointer"
+        {/* Minimal Glowing Mouse Scroll Indicator */}
+        <div
+          className="absolute bottom-10 flex items-center justify-center w-full"
+          style={{ pointerEvents: "none" }}
         >
-          ↓ Scroll
-        </motion.button>
+          <button
+            onClick={scrollToAbout}
+            className="relative flex flex-col items-center group"
+            style={{ pointerEvents: "auto" }}
+            aria-label="Scroll down"
+          >
+            <span
+              className="mouse-icon-glow"
+              style={{
+                display: "inline-block",
+                borderRadius: "22px",
+                border: "2px solid #c084fc",
+                width: "32px",
+                height: "50px",
+                boxShadow: "0 0 16px #a855f7, 0 0 10px #ec4899",
+                background: "rgba(60,0,60,0.13)",
+                position: "relative",
+                transition: "box-shadow 0.3s",
+              }}
+            >
+              <span
+                className="mouse-wheel-dot"
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "14px",
+                  transform: "translateX(-50%)",
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(90deg, #c084fc 40%, #ec4899 100%)",
+                  boxShadow: "0 0 8px #a855f7, 0 0 4px #ec4899",
+                  animation: "mouse-wheel-move 1.2s infinite",
+                  opacity: 0.85,
+                }}
+              ></span>
+            </span>
+          </button>
+        </div>
 
         {/* Custom Glow Cursor */}
         <>
@@ -257,7 +351,7 @@ export default function Home() {
               scale: isClicking ? 2.2 : 1.5,
               opacity: isClicking ? 0.6 : 0.4,
             }}
-            transition={{ type: "spring", stiffness: 500, damping: 25, mass: 0.8 }}
+            transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.8 }}
             className="fixed top-0 left-0 w-16 h-16 rounded-full pointer-events-none
       bg-purple-500 blur-2xl opacity-50 mix-blend-screen z-40"
           />
@@ -269,7 +363,7 @@ export default function Home() {
               scale: isClicking ? 1.6 : 1,
               opacity: 1,
             }}
-            transition={{ type: "spring", stiffness: 500, damping: 25, mass: 0.8 }}
+            transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.8 }}
             className="fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none
       bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 shadow-lg z-50"
           />
@@ -887,3 +981,38 @@ export default function Home() {
     </div>
   );
 }
+      {/* Custom styles for glow/pulse/typewriter/shimmer/mouse icon */}
+      <style>{`
+        @keyframes pulse-glow {
+          0% { text-shadow: 0 0 24px #a855f7, 0 0 48px #ec4899, 0 0 2px #fff; }
+          100% { text-shadow: 0 0 32px #c084fc, 0 0 60px #ec4899, 0 0 4px #fff; }
+        }
+        @keyframes blink-cursor {
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
+        /* Typewriter shimmer effect */
+        .tagline-shimmer {
+          background: linear-gradient(90deg, #e0e0e0 0%, #d1afff 30%, #fbc2eb 55%, #d1afff 80%, #e0e0e0 100%);
+          background-size: 200% auto;
+          animation: shimmer-gradient 2.2s linear 1;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        @keyframes shimmer-gradient {
+          0% {
+            background-position: 200% 0;
+          }
+          100% {
+            background-position: 0 0;
+          }
+        }
+        /* Mouse scroll animation */
+        @keyframes mouse-wheel-move {
+          0% { opacity: 0.85; top: 14px; }
+          10% { opacity: 1; }
+          50% { top: 28px; opacity: 1; }
+          80% { opacity: 0.8; }
+          100% { opacity: 0.85; top: 14px; }
+        }
+      `}</style>
