@@ -2,26 +2,80 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
-const certificateData = [
+interface CertificatePost {
+  title: string;
+  brief: string;
+  coverImage: string | null;
+  slug: string;
+  url: string;
+}
+
+const certificateData: CertificatePost[] = [
   {
-    title: "React Developer Certification",
-    description:
-      "Learned advanced React concepts including hooks, context, and performance optimization. Built real-world applications and mastered component architecture.",
-    image: "/certificates/react.png", // placeholder path
+    title: "Deep Learning Onramp – MathWorks",
+    brief: "Completed the Deep Learning Onramp course by MathWorks Training Services, learning neural networks and deep learning fundamentals in MATLAB.",
+    coverImage: "/certificates/deep-learning.png",
+    slug: "deep-learning-onramp-mathworks",
+    url: "https://deep-learning-onramp-certificate-mathworks.hashnode.dev/deep-learning-onramp-certificate-mathworks",
   },
   {
-    title: "Next.js Mastery",
-    description:
-      "Gained expertise in server-side rendering, static site generation, and dynamic routing with Next.js. Developed full-stack applications with API routes.",
-    image: "/certificates/nextjs.png", // placeholder path
+    title: "Image Processing Onramp – MathWorks",
+    brief: "Learned image processing techniques and fundamentals using MATLAB through the Image Processing Onramp course.",
+    coverImage: "/certificates/image-processing.png",
+    slug: "image-processing-onramp-mathworks",
+    url: "https://image-processing-onramp-certificate-mathworks.hashnode.dev/image-processing-onramp-certificate-mathworks?showSharer=true",
   },
   {
-    title: "UI/UX Design Essentials",
-    description:
-      "Explored the fundamentals of user interface and experience design. Focused on accessibility, color theory, and modern design systems.",
-    image: "/certificates/uiux.png", // placeholder path
+    title: "Machine Learning Onramp – MathWorks",
+    brief: "Gained foundational knowledge of machine learning concepts and applications in MATLAB.",
+    coverImage: "/certificates/machine-learning.png",
+    slug: "machine-learning-onramp-mathworks",
+    url: "https://machine-learning-onramp-certificate-mathworks.hashnode.dev/machine-learning-onramp-certificate-mathworks?showSharer=true",
+  },
+  {
+    title: "MATLAB Onramp – MathWorks",
+    brief: "Completed the MATLAB Onramp course to master the basics of MATLAB programming and environment.",
+    coverImage: "/certificates/matlab-onramp.png",
+    slug: "matlab-onramp-mathworks",
+    url: "https://matlab-onramp-certificate-mathworks.hashnode.dev/matlab-onramp-certificate-mathworks?showSharer=true",
+  },
+  {
+    title: "Full-Stack Web Development Bootcamp – Udemy",
+    brief: "Completed an intensive bootcamp covering front-end and back-end web development technologies.",
+    coverImage: "/certificates/fullstack-web-dev.png",
+    slug: "full-stack-web-development-bootcamp-udemy",
+    url: "https://fullstack-web-development-bootcamp-certificate-udemy.hashnode.dev/full-stack-web-development-bootcamp-certificate-udemy?showSharer=true",
+  },
+  {
+    title: "iOS & Swift Bootcamp – Udemy",
+    brief: "Learned iOS app development and Swift programming through hands-on projects.",
+    coverImage: "/certificates/ios-swift.png",
+    slug: "ios-swift-bootcamp-udemy",
+    url: "https://ios-swift-app-development-bootcamp-certificate-udemy.hashnode.dev/ios-and-swift-app-development-bootcamp-certificate-udemy?showSharer=true",
+  },
+  {
+    title: "Mastering Data Structures & Algorithms – Udemy",
+    brief: "Mastered essential data structures and algorithms for technical interviews and software development.",
+    coverImage: "/certificates/data-structures-algorithms.png",
+    slug: "mastering-data-structures-algorithms-udemy",
+    url: "https://mastering-data-structures-algorithms-certificate-udemy.hashnode.dev/mastering-data-structures-and-algorithms-certificate-udemy?showSharer=true",
+  },
+  {
+    title: "Mastering Machine Learning – Udemy",
+    brief: "Advanced course on machine learning techniques and practical implementations.",
+    coverImage: "/certificates/mastering-machine-learning.png",
+    slug: "mastering-machine-learning-udemy",
+    url: "https://mastering-machine-learning-certificate-udemy.hashnode.dev/mastering-machine-learning-from-basics-to-breakthroughs-udemy?showSharer=true",
+  },
+  {
+    title: "Programming in Java – NPTEL",
+    brief: "Completed the Programming in Java course offered by NPTEL, covering core Java concepts and programming.",
+    coverImage: "/certificates/programming-java.png",
+    slug: "programming-in-java-nptel",
+    url: "https://programming-in-java-certificate-nptel.hashnode.dev/programming-in-java-certificate-nptel?showSharer=true",
   },
 ];
 
@@ -47,7 +101,7 @@ export default function CertificatesPage() {
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl">
         {certificateData.map((cert, idx) => (
           <motion.div
-            key={cert.title}
+            key={cert.slug}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             transition={{
@@ -59,21 +113,36 @@ export default function CertificatesPage() {
             }}
             whileHover={{ scale: 1.08, rotate: 1 }}
             viewport={{ once: true, amount: 0.3 }}
-            onClick={() => setSelectedCert(cert.image)}
+            onClick={() => cert.coverImage && setSelectedCert(cert.coverImage)}
             className="relative rounded-2xl p-[2px] bg-gradient-to-br from-fuchsia-500 via-pink-500 to-purple-500 shadow-xl cursor-pointer hover:scale-105 hover:shadow-pink-500/50 transition-transform"
           >
             <div className="flex flex-col h-full rounded-2xl bg-black/80 backdrop-blur-xl p-6">
-              <div className="flex items-center justify-center h-32 mb-4">
+              <div className="relative w-full h-48 sm:h-64 mb-4">
                 {/* Certificate image placeholder */}
-                <img
-                  src={cert.image}
-                  alt={cert.title}
-                  className="w-24 h-24 object-contain rounded-xl shadow-lg hover:scale-105 transition-transform"
-                />
+                {cert.coverImage ? (
+                  <Image
+                    src={cert.coverImage}
+                    alt={cert.title}
+                    fill
+                    className="object-contain rounded-xl shadow-lg hover:scale-105 transition-transform"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-gray-700 rounded-xl flex items-center justify-center text-sm text-purple-300">
+                    No Image
+                  </div>
+                )}
               </div>
               <h2 className="text-xl font-bold text-fuchsia-200 mb-2">{cert.title}</h2>
-              <p className="text-purple-100 text-sm mb-2 flex-1">{cert.description}</p>
-              {/* Optional: Add a "View Certificate" button or link */}
+              <p className="text-purple-100 text-sm mb-2 flex-1">{cert.brief}</p>
+              <a
+                href={cert.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-block mt-auto text-sm font-semibold text-pink-400 hover:text-pink-500 transition-colors"
+              >
+                More About Certificate →
+              </a>
             </div>
           </motion.div>
         ))}
