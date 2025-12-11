@@ -13,6 +13,7 @@ export default function Home() {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [isClicking, setIsClicking] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
 
   // Tagline word swap highlight state
   const words = ["Problem Solver", "Tech Enthusiast", "AI Explorer", "App Builder"];
@@ -69,6 +70,15 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 1024);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const scrollToAbout = () => {
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -86,51 +96,45 @@ export default function Home() {
   const experienceEntries = [
     {
       title: "Built RiskyFy",
-      date: "2024",
+      date: "JUNE 2024",
       description:
         "Developed a fintech-focused trading analysis app with calculators, trade logs, and strategy simulators using SwiftUI and Firebase.",
     },
     {
       title: "Personal Finance Tracker",
-      date: "2025",
+      date: "SEPTEMBER 2024",
       description:
         "Created a tracker app to manage expenses, savings, and financial goals. Built with Next.js, Firebase, and Tailwind for seamless UI and sync.",
     },
     {
       title: "Full-Stack Development Learning",
-      date: "2023 - Present",
+      date: "JANUARY 2025",
       description:
         "Focused on mastering React, Next.js, iOS development with SwiftUI, and cloud integrations to build scalable apps.",
     },
     {
       title: "Community Connect",
-      date: "Jan 2021 - Present",
+      date: "JUNE 2025",
       description:
         "Organized tech workshops and coding bootcamps for local communities.",
     },
     {
-      title: "Personal Projects",
-      date: "Ongoing",
-      description:
-        "Built multiple apps and web projects focusing on productivity and design.",
-    },
-    {
       title: "Learning Embedded Systems with Arduino",
-      date: "Currently",
+      date: "NOVEMBER 2025",
       description:
         "Exploring hardware programming and embedded systems using Arduino to broaden my development skills.",
     },
     {
-      title: "Hackathon Participation",
-      date: "2024",
-      description:
-        "Collaborated in national and online hackathons, solving real-world problems under tight deadlines.",
-    },
-    {
       title: "Open Source Contributions",
-      date: "2023 - Present",
+      date: "Ongoing",
       description:
         "Contributed to open-source projects on GitHub, improving documentation, fixing bugs, and adding new features.",
+    },   
+     {
+      title: "Personal Projects",
+      date: "Ongoing",
+      description:
+        "Built multiple apps and web projects focusing on productivity and design.",
     },
     {
       title: "UI/UX Design Practice",
@@ -202,7 +206,7 @@ export default function Home() {
   };
 
   return (
-    <div className="cursor-none">
+    <div className={isDesktop ? "cursor-none" : "cursor-auto"}>
       {/* Floating Menu Button */}
       <button
         onClick={() => setIsNavOpen(!isNavOpen)}
@@ -342,32 +346,32 @@ export default function Home() {
         </div>
 
         {/* Custom Glow Cursor */}
-        <>
-          {/* Outer Glow Aura */}
-          <motion.div
-            animate={{
-              x: cursorPos.x - 32,
-              y: cursorPos.y - 32,
-              scale: isClicking ? 2.2 : 1.5,
-              opacity: isClicking ? 0.6 : 0.4,
-            }}
-            transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.8 }}
-            className="fixed top-0 left-0 w-16 h-16 rounded-full pointer-events-none
-      bg-purple-500 blur-2xl opacity-50 mix-blend-screen z-40"
-          />
-          {/* Inner Core Cursor */}
-          <motion.div
-            animate={{
-              x: cursorPos.x - 8,
-              y: cursorPos.y - 8,
-              scale: isClicking ? 1.6 : 1,
-              opacity: 1,
-            }}
-            transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.8 }}
-            className="fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none
-      bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 shadow-lg z-50"
-          />
-        </>
+        {isDesktop && (
+          <>
+            {/* Outer Glow Aura */}
+            <motion.div
+              animate={{
+                x: cursorPos.x - 32,
+                y: cursorPos.y - 32,
+                scale: isClicking ? 2.2 : 1.5,
+                opacity: isClicking ? 0.6 : 0.4,
+              }}
+              transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.8 }}
+              className="fixed top-0 left-0 w-16 h-16 rounded-full pointer-events-none bg-purple-500 blur-2xl opacity-50 mix-blend-screen z-40"
+            />
+            {/* Inner Core Cursor */}
+            <motion.div
+              animate={{
+                x: cursorPos.x - 8,
+                y: cursorPos.y - 8,
+                scale: isClicking ? 1.6 : 1,
+                opacity: 1,
+              }}
+              transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.8 }}
+              className="fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 shadow-lg z-50"
+            />
+          </>
+        )}
       </motion.section>
 
       {/* About Section moved after landing */}
